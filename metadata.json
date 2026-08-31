@@ -1,0 +1,6 @@
+{
+  "name": "BacanaLive",
+  "description": "Plataforma de análise estatística de futebol ao vivo com deck de partidas reordenável, menu vertical de gráficos e pressão, alertas personalizados, FlashScore e ingestão via Crawler Python.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

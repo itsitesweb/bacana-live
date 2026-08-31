@@ -1,0 +1,115 @@
+# Motor de Decisão Terminal — V1.2 Simulation Candidate
+# Todos os thresholds editáveis sem mexer no código
+
+engine:
+  rule_version: "V1.2"
+  mode: "simulation"   # simulation | live
+  one_position_per_match: true
+  scan_interval_seconds: 120
+  cooldown_minutes_after_exit: 10   # Era 5 — aumentado pra prevenir reentry imediata pós-exit Over
+  data_delay_block_seconds: 180
+  signal_repeat_cooldown_minutes: 5
+  signal_valid_minutes_default: 5
+  signal_valid_minutes_gol_limite: 2
+  max_entry_minute: 83
+  max_over_entry_minute: 75        # Over normal bloqueado apos este minuto (LATE_LIMIT tem regra propria)
+
+back:
+  tier_1_early:
+    min_minute: 20
+    max_minute: 35
+    min_bc: 2
+    max_bc_rate: 15
+    max_opponent_bc: 0
+    min_xgot: 0.5
+  tier_1_main:
+    min_minute: 36
+    max_minute: 50
+    min_bc: 3
+    max_opponent_bc: 0
+    min_xgot: 0.5
+  tier_1_late:
+    min_minute: 51
+    max_minute: 65
+    min_bc: 3
+    max_opponent_bc: 0
+    min_xgot: 0.5
+    max_total_goals: 2
+  tier_2:
+    min_minute: 36
+    max_minute: 55
+    exact_bc: 2
+    max_opponent_bc: 0
+    min_xgot: 0.5
+  small:
+    max_minute: 55
+    min_bc: 3
+    opponent_bc: 1
+    min_xgot: 0.5
+    max_opponent_xgot: 0.4
+
+over:
+  premium:
+    min_minute: 36
+    max_minute: 50
+    min_total_bc: 3
+    max_match_bc_rate: 15
+    min_min_bc: 1
+  bilateral_forte:
+    min_minute: 36
+    max_minute: 65
+    min_total_bc: 4
+    max_match_bc_rate: 15
+    min_min_bc: 2
+  small:
+    min_minute: 66
+    max_minute: 75
+    min_total_bc: 5
+    max_match_bc_rate: 15
+    min_min_bc: 2
+    max_total_goals: 2
+    max_minutes_since_last_bc: 10
+  gol_limite:
+    min_minute: 76
+    max_minute: 83
+    min_total_bc: 7
+    min_min_bc: 2
+    require_bts: true
+    min_score_diff: 1
+    max_score_diff: 2
+    max_minutes_since_last_bc: 12
+
+post_back:
+  exit_opponent_bc: 3
+  alert_minutes_no_team_bc: 15
+  reduce_minutes_no_team_bc: 20
+
+post_over:
+  alert_minutes_no_match_bc: 10
+  reduce_minutes_no_match_bc: 15
+  exit_minutes_no_match_bc: 20
+  exit_score_diff: 3
+
+score:
+  caution_minute_threshold: 70
+  mixed_zone_opponent_xgot_threshold: 0.4
+
+telegram:
+  # --- Conexão ---
+  enabled: false                          # true para enviar mensagens reais
+  bot_token_env: "TELEGRAM_BOT_TOKEN"     # nome da variável de ambiente
+  chat_id_env: "TELEGRAM_CHAT_ID"         # nome da variável de ambiente
+  simulation_tag: ""                       # vazio = modo definitivo (sem tag)
+
+  # --- Filtros ---
+  send_info_messages: false               # NO_ACTION, COOLDOWN
+  send_hold_messages: false               # HOLD_BACK, HOLD_OVER, WATCH_BACK_LATE
+  anti_spam_minutes: 5                    # sinal repetido nessa janela → SINAL MANTIDO
+  manual_review_cooldown_minutes: 30      # MANUAL_REVIEW repetido: 30 min cooldown
+
+  # --- Formatação ---
+  copy_style: "concise"
+  include_reason: true
+  include_valid_until: true
+  include_command_line: true
+  urgent_first_line: true
